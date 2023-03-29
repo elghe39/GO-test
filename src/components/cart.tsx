@@ -1,5 +1,4 @@
-import { Box } from "@chakra-ui/layout";
-import { Image, Text, Flex } from "@chakra-ui/react";
+import { Image, Text, Flex, Box } from "@chakra-ui/react";
 import { useState } from "react";
 
 export default function Cart(props: any) {
@@ -77,7 +76,7 @@ function Item(props: any) {
   };
 
   const handlePlusQuantity = () => {
-    setQuantity((current) => current + 1);
+    setQuantity((current: number) => current + 1);
     onPlus(item);
   };
 
@@ -85,13 +84,13 @@ function Item(props: any) {
     if (quantity == 1) {
       onDeleteItems(item);
     } else {
-      setQuantity((current) => current - 1);
+      setQuantity((current: number) => current - 1);
       onMinus(item);
     }
   };
 
   return (
-    <Flex py={"20px"}>
+    <Box py={"20px"} display={"flex"}>
       <Box
         w={"90px"}
         h={"90px"}
@@ -185,6 +184,6 @@ function Item(props: any) {
           </Box>
         </Flex>
       </Box>
-    </Flex>
+    </Box>
   );
 }

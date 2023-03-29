@@ -1,5 +1,4 @@
-import { Box } from "@chakra-ui/layout";
-import { Image, Text, Flex, Button } from "@chakra-ui/react";
+import { Image, Text, Flex, Button, Box } from "@chakra-ui/react";
 
 export default function Products(props: any) {
   const { shoes, addedShoes, onAddToCart } = props;
