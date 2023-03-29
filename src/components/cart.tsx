@@ -1,8 +1,9 @@
 import { Box } from "@chakra-ui/layout";
 import { Image, Text, Flex } from "@chakra-ui/react";
+import { useState } from "react";
 
 export default function Cart(props: any) {
-  const { cart } = props;
+  const { cart, onDeleteItems, onPlus, onMinus, totalPrice } = props;
   return (
     <Box
       className={"card"}
@@ -33,7 +34,7 @@ export default function Cart(props: any) {
         position={"relative"}
       >
         <Text>Your Cart</Text>
-        <Text>$0.0</Text>
+        <Text>${totalPrice.toFixed(2)}</Text>
       </Flex>
       <Box
         position={"relative"}
@@ -50,8 +51,15 @@ export default function Cart(props: any) {
             Your cart is empty.
           </Text>
         ) : (
-          // eslint-disable-next-line react/jsx-key
-          cart.map((item: any) => <Item item={item}></Item>)
+          cart.map((item: any) => (
+            // eslint-disable-next-line react/jsx-key
+            <Item
+              item={item}
+              onDeleteItems={onDeleteItems}
+              onPlus={onPlus}
+              onMinus={onMinus}
+            ></Item>
+          ))
         )}
         <Box h={"130px"}></Box>
       </Box>
@@ -60,7 +68,28 @@ export default function Cart(props: any) {
 }
 
 function Item(props: any) {
-  const { item } = props;
+  const { item, onDeleteItems, onPlus, onMinus } = props;
+
+  const [quantity, setQuantity] = useState(item.quantity);
+
+  const handleDeleteItem = () => {
+    onDeleteItems(item);
+  };
+
+  const handlePlusQuantity = () => {
+    setQuantity((current) => current + 1);
+    onPlus(item);
+  };
+
+  const handleMinusQuantity = () => {
+    if (quantity == 1) {
+      onDeleteItems(item);
+    } else {
+      setQuantity((current) => current - 1);
+      onMinus(item);
+    }
+  };
+
   return (
     <Flex py={"20px"}>
       <Box
@@ -106,6 +135,7 @@ function Item(props: any) {
               bgColor={"#eee"}
               borderRadius={"100%"}
               _hover={{ bgColor: "gray.300" }}
+              onClick={handleMinusQuantity}
             >
               <Image
                 src={"minus.png"}
@@ -123,7 +153,7 @@ function Item(props: any) {
               alignItems={"center"}
               justifyContent={"center"}
             >
-              {item.quantity}
+              {quantity}
             </Text>
             <Box
               display={"flex"}
@@ -132,6 +162,7 @@ function Item(props: any) {
               bgColor={"#eee"}
               borderRadius={"100%"}
               _hover={{ bgColor: "gray.300" }}
+              onClick={handlePlusQuantity}
             >
               <Image
                 src={"plus.png"}
@@ -148,6 +179,7 @@ function Item(props: any) {
             bgColor={"#f6c90e"}
             borderRadius={"100%"}
             _hover={{ bgColor: "yellow.400", boxShadow: "lg" }}
+            onClick={handleDeleteItem}
           >
             <Image src={"trash.png"} alt="" boxSize={"16px"} m={"auto"}></Image>
           </Box>

@@ -2,7 +2,7 @@ import { Box } from "@chakra-ui/layout";
 import { Image, Text, Flex, Button } from "@chakra-ui/react";
 
 export default function Products(props: any) {
-  const { shoes, onAddToCart } = props;
+  const { shoes, addedShoes, onAddToCart } = props;
 
   return (
     <Box
@@ -48,7 +48,11 @@ export default function Products(props: any) {
       >
         {shoes.map((product: any) => (
           // eslint-disable-next-line react/jsx-key
-          <Item product={product}></Item>
+          <Item
+            product={product}
+            addedShoes={addedShoes}
+            onAddToCart={onAddToCart}
+          ></Item>
         ))}
         <Box h={"100px"}></Box>
       </Box>
@@ -57,13 +61,11 @@ export default function Products(props: any) {
 }
 
 function Item(props: any) {
-  const { product } = props;
+  const { product, addedShoes, onAddToCart } = props;
 
-  const handleAddToCart = (product: any) => {
+  const handleAddToCart = () => {
     product.quantity = 1;
-    console.log(product);
-    // onAddToCart(product);
-    return undefined;
+    onAddToCart(product);
   };
 
   return (
@@ -96,25 +98,43 @@ function Item(props: any) {
       <Text fontSize={"13px"} lineHeight={1.8} mb={"20px"} color={"#777"}>
         {product.description}
       </Text>
-      <Flex justifyContent={"space-between"} alignItems={"center"}>
+      <Flex justifyContent={"space-between"} alignItems={"center"} h={"46px"}>
         <Text fontSize={"18px"} fontWeight={700} color={"#303841"}>
           ${product.price.toFixed(2)}
         </Text>
-        <Button
-          fontSize={"14px"}
-          bgColor={"#f6c90e"}
-          color={"#303841"}
-          fontWeight={700}
-          boxSizing={"border-box"}
-          borderRadius={"100px"}
-          _hover={{
-            bgColor: "yellow.400",
-            boxShadow: "lg",
-          }}
-          // onSubmit={handleAddToCart(product)}
-        >
-          ADD TO CART
-        </Button>
+        {addedShoes.includes(product.id) ? (
+          <Box
+            w={"46px"}
+            h={"100%"}
+            borderRadius={"100%"}
+            bgColor={"#f6c90e"}
+            display={"flex"}
+          >
+            <Image
+              m={"auto"}
+              alt={"Added product icon"}
+              src={"check.png"}
+              boxSize={"22px"}
+            ></Image>
+          </Box>
+        ) : (
+          <Button
+            h={"100%"}
+            fontSize={"14px"}
+            bgColor={"#f6c90e"}
+            color={"#303841"}
+            fontWeight={700}
+            boxSizing={"border-box"}
+            borderRadius={"100px"}
+            _hover={{
+              bgColor: "yellow.400",
+              boxShadow: "lg",
+            }}
+            onClick={handleAddToCart}
+          >
+            ADD TO CART
+          </Button>
+        )}
       </Flex>
     </Box>
   );
